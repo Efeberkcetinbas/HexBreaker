@@ -6,6 +6,14 @@ public enum GameEvent
 {
     //Player
     OnPlayerStartMove,
+
+    //Timer
+    OnStartTimer,
+    OnStopTimer,
+
+    //Combo
+    OnCheckCombo,
+
     
     //Game Management
     OnGameStart,

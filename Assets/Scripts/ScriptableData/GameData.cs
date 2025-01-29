@@ -12,6 +12,19 @@ public class GameData : ScriptableObject
     public int levelIndex;
     public int levelNumber;
 
+    //Probability
+    public int ChanceOfCriticalHit;
+    public int CriticalHitDamage;
+
+    public TimerTypes timerTypes;
+
+
+    //Player
+    public int RoundedTime;
+    public float maxTimerRange;
+
+
     public bool isGameEnd=false;
+    public bool isStartTimer=false;
 
 }
