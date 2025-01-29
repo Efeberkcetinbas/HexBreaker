@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c50767538b9db184ca3249f7ed8e7280, type: 3}
+  m_Name: HexCreator
+  m_EditorClassIdentifier: 
+  hexParents:
+  - hexParentPrefab: {fileID: 2422768982452199324, guid: e95d2a8f4f5d99f4bb0542e6af45ad49, type: 3}
+    towerValue: 64
+    yInterval: 0.2
+    hexChildPrefab: {fileID: 8377991755981697101, guid: d0972d6fc5e6889419c36f004f5a1172, type: 3}
+  - hexParentPrefab: {fileID: 2422768982452199324, guid: e95d2a8f4f5d99f4bb0542e6af45ad49, type: 3}
+    towerValue: 55
+    yInterval: 0.2
+    hexChildPrefab: {fileID: 8377991755981697101, guid: d0972d6fc5e6889419c36f004f5a1172, type: 3}
+  - hexParentPrefab: {fileID: 2422768982452199324, guid: e95d2a8f4f5d99f4bb0542e6af45ad49, type: 3}
+    towerValue: 12
+    yInterval: 0.2
+    hexChildPrefab: {fileID: 8377991755981697101, guid: d0972d6fc5e6889419c36f004f5a1172, type: 3}
