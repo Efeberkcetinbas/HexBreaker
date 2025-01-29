@@ -18,16 +18,65 @@ public class HexParent : MonoBehaviour
 
     void UpdateColor()
     {
-        // Calculate the color index based on towerValue and divide by range size
-        float range = 100f / valueColors.Length; // Since we have 7 colors and towerValue is 0-100
-        int index = Mathf.FloorToInt(towerValue / range); // Map towerValue to color index
+        if (valueColors.Length < 2) return; // Ensure there are at least two colors
 
-        // Ensure the index stays within valid bounds (0 to 6)
-        index = Mathf.Clamp(index, 0, valueColors.Length - 1);
-        currentColor = valueColors[index];
+        float range = 100f / (valueColors.Length - 1); // Divide 100 by (color count - 1)
+        float normalizedValue = towerValue / range; // Get the floating point index
 
-        // Optionally log the color
-        Debug.Log($"Tower Value: {towerValue}, Color Index: {index}, Color: {currentColor}");
+        int lowerIndex = Mathf.FloorToInt(normalizedValue); // Get lower bound index
+        int upperIndex = Mathf.Clamp(lowerIndex + 1, 0, valueColors.Length - 1); // Get upper bound index
+
+        float lerpFactor = normalizedValue - lowerIndex; // Get interpolation factor between two colors
+        currentColor = Color.Lerp(valueColors[lowerIndex], valueColors[upperIndex], lerpFactor);
+
+        // Apply color to HexParent
+        //GetComponent<Renderer>().material.color = currentColor;
+
+        Debug.Log($"Tower Value: {towerValue}, Color Index: {lowerIndex}-{upperIndex}, Lerp: {lerpFactor}, Color: {currentColor}");
+    }
+
+    public void DecreaseTowerValue()
+    {
+        towerValue = Mathf.Max(0, towerValue - 1); // Reduce by 1 per bullet
+
+        UpdateHexChildren();
+
+        if (towerValue == 0)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            UpdateColor();
+            UpdateHexChildText();
+        }
+    }
+
+    void UpdateHexChildren()
+    {
+        int expectedChildCount = Mathf.Max(1, towerValue / 5); // Ensure at least 1 remains
+        int currentChildCount = transform.childCount;
+
+        // Remove excess HexChildren if needed
+        while (currentChildCount > expectedChildCount)
+        {
+            Destroy(transform.GetChild(currentChildCount - 1).gameObject);
+            currentChildCount--;
+        }
+
+        // Reposition remaining HexChildren
+        for (int i = 0; i < currentChildCount; i++)
+        {
+            transform.GetChild(i).localPosition = new Vector3(0, i * yInterval, 0);
+        }
+    }
+
+    void UpdateHexChildText()
+    {
+        foreach (HexChild child in GetComponentsInChildren<HexChild>())
+        {
+            child.SetHexChild(currentColor, towerValue);
+        }
     }
 
     void SpawnHexChildren()
