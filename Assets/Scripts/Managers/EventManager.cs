@@ -17,6 +17,9 @@ public enum GameEvent
     //Combo
     OnCheckCombo,
 
+    //Weapon
+    OnSelectWeaponType,
+
     
     //Game Management
     OnGameStart,
@@ -24,13 +27,11 @@ public enum GameEvent
     OnIncreaseScore,
     OnUIUpdate,
     OnLevelUIUpdate,
-    
     OnNextLevel,
     OnSuccess,
     OnSuccessUI,
     OnFailUI,
     OnRestartLevel,
-    OnRestartGame,
 
 }
 public class EventManager

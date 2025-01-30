@@ -20,7 +20,9 @@ MonoBehaviour:
   CriticalHitDamage: 0
   timerTypes: 1
   LevelHexParentNumber: 0
-  RoundedTime: 89
+  WeaponIndex: 2
+  WeaponBoosterAmount: 5
+  RoundedTime: 93
   maxTimerRange: 100
   isGameEnd: 0
   isStartTimer: 0

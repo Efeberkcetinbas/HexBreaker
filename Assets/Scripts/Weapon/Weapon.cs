@@ -5,18 +5,29 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
-    [SerializeField] private Transform firePoint;
+    
     [SerializeField] private GameData gameData;
-    [SerializeField] private float fireRate = 0.2f; // Interval between shots
+    [SerializeField] private List<WeaponType> weaponTypes= new List<WeaponType>();
 
+    private Transform firePoint;
+    private float fireRate = 0.2f; // Interval between shots
+
+
+
+    private void Start()
+    {
+        OnSelectWeaponType();
+    }
     private void OnEnable()
     {
         EventManager.AddHandler(GameEvent.OnStopTimer, OnStopTimer);
+        EventManager.AddHandler(GameEvent.OnSelectWeaponType, OnSelectWeaponType);
     }
 
     private void OnDisable()
     {
         EventManager.RemoveHandler(GameEvent.OnStopTimer, OnStopTimer);
+        EventManager.RemoveHandler(GameEvent.OnSelectWeaponType, OnSelectWeaponType);
     }
 
     private void OnStopTimer()
@@ -24,9 +35,23 @@ public class Weapon : MonoBehaviour
         StartCoroutine(FireBullets());
     }
 
+    private void OnSelectWeaponType()
+    {
+        for (int i = 0; i < weaponTypes.Count; i++)
+        {
+            weaponTypes[i].gameObject.SetActive(false);
+        }
+
+        weaponTypes[gameData.WeaponIndex].gameObject.SetActive(true);
+        weaponTypes[gameData.WeaponIndex].SetBooster();
+        firePoint=weaponTypes[gameData.WeaponIndex].CurrentFirePoint;
+        fireRate=weaponTypes[gameData.WeaponIndex].CurrentFireRate;
+
+    }
+
     IEnumerator FireBullets()
     {
-        int bulletsToFire = gameData.RoundedTime;
+        int bulletsToFire = gameData.RoundedTime+gameData.WeaponBoosterAmount;
 
         for (int i = 0; i < bulletsToFire; i++)
         {

@@ -21,6 +21,10 @@ public class GameData : ScriptableObject
     //Level
     public int LevelHexParentNumber;
 
+    //Weapon
+    public int WeaponIndex;
+    public int WeaponBoosterAmount;
+
 
     //Player
     public int RoundedTime;
