@@ -1,11 +1,29 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
+public class AudioClipsGameManagement
+{
+    public AudioClip SuccessSound;
+    public AudioClip SuccessUISound;
+    public AudioClip RestartSound;
+    public AudioClip NextLevelSound;
+    public AudioClip StartSound;
+    public AudioClip FailUISound;
+    public AudioClip PanelChangeSound;
+    public AudioClip ChangeMonsterPanelSound;
+    public AudioClip ChangeMonsterPartSound;
+    public AudioClip ChangeMonsterColorSound;
+}
+
+
 public class AudioManager : MonoBehaviour
 {
     public AudioClip GameLoop,BuffMusic;
-    public AudioClip SuccessSound,SuccessUISound,RestartSound ,NextLevelSound,StartSound,FailUISound;
+    [Header("Game Management")]
+    public AudioClipsGameManagement audioClipsGameManagement;
 
     AudioSource musicSource,effectSource;
 
@@ -44,33 +62,33 @@ public class AudioManager : MonoBehaviour
 
     private void OnSuccess()
     {
-        effectSource.PlayOneShot(SuccessSound);
+        effectSource.PlayOneShot(audioClipsGameManagement.SuccessSound);
     }
 
     private void OnSuccessUI()
     {
-        effectSource.PlayOneShot(SuccessUISound);
+        effectSource.PlayOneShot(audioClipsGameManagement.SuccessUISound);
     }
 
 
     private void OnRestartLevel()
     {
-        effectSource.PlayOneShot(RestartSound);
+        effectSource.PlayOneShot(audioClipsGameManagement.RestartSound);
     }
 
     private void OnNextLevel()
     {
-        effectSource.PlayOneShot(NextLevelSound);
+        effectSource.PlayOneShot(audioClipsGameManagement.NextLevelSound);
     }
 
     private void OnGameStart()
     {
-        effectSource.PlayOneShot(StartSound);
+        effectSource.PlayOneShot(audioClipsGameManagement.StartSound);
     }
 
     private void OnFailUI()
     {
-        effectSource.PlayOneShot(FailUISound);
+        effectSource.PlayOneShot(audioClipsGameManagement.FailUISound);
     }
 
   

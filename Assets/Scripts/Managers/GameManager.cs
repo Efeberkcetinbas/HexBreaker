@@ -6,7 +6,6 @@ using DG.Tweening;
 public class GameManager : MonoBehaviour
 {
     public GameData gameData;
-    public PlayerData playerData;
 
 
     private WaitForSeconds waitForSeconds;
@@ -26,6 +25,7 @@ public class GameManager : MonoBehaviour
     {
         EventManager.AddHandler(GameEvent.OnNextLevel,OnNextLevel);
         EventManager.AddHandler(GameEvent.OnRestartLevel,OnRestartLevel);
+        EventManager.AddHandler(GameEvent.OnHexDestroyed,OnHexDestroyed);
 
     }
 
@@ -33,11 +33,19 @@ public class GameManager : MonoBehaviour
     {
         EventManager.RemoveHandler(GameEvent.OnNextLevel,OnNextLevel);
         EventManager.RemoveHandler(GameEvent.OnRestartLevel,OnRestartLevel);
+        EventManager.RemoveHandler(GameEvent.OnHexDestroyed,OnHexDestroyed);
 
     }
 
     
-    
+    private void OnHexDestroyed()
+    {
+        gameData.LevelHexParentNumber--;
+        if(gameData.LevelHexParentNumber <=0)
+        {
+            Debug.Log("ALL HEX's DESTROYED");
+        }
+    }
 
     private void OnNextLevel()
     {

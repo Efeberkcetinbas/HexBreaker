@@ -19,7 +19,8 @@ MonoBehaviour:
   ChanceOfCriticalHit: 0
   CriticalHitDamage: 0
   timerTypes: 1
-  RoundedTime: 0
+  LevelHexParentNumber: 0
+  RoundedTime: 89
   maxTimerRange: 100
   isGameEnd: 0
   isStartTimer: 0

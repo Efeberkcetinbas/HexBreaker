@@ -32,7 +32,7 @@ public class HexParent : MonoBehaviour
         // Apply color to HexParent
         //GetComponent<Renderer>().material.color = currentColor;
 
-        Debug.Log($"Tower Value: {towerValue}, Color Index: {lowerIndex}-{upperIndex}, Lerp: {lerpFactor}, Color: {currentColor}");
+        //Debug.Log($"Tower Value: {towerValue}, Color Index: {lowerIndex}-{upperIndex}, Lerp: {lerpFactor}, Color: {currentColor}");
     }
 
     public void DecreaseTowerValue()
@@ -43,6 +43,7 @@ public class HexParent : MonoBehaviour
 
         if (towerValue == 0)
         {
+            EventManager.Broadcast(GameEvent.OnHexDestroyed);
             Destroy(gameObject);
         }
         else

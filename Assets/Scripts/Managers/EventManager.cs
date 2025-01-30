@@ -11,6 +11,9 @@ public enum GameEvent
     OnStartTimer,
     OnStopTimer,
 
+    //Hex
+    OnHexDestroyed,
+
     //Combo
     OnCheckCombo,
 

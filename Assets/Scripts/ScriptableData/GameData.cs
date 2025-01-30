@@ -18,6 +18,9 @@ public class GameData : ScriptableObject
 
     public TimerTypes timerTypes;
 
+    //Level
+    public int LevelHexParentNumber;
+
 
     //Player
     public int RoundedTime;

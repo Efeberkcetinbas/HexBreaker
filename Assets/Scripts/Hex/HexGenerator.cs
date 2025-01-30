@@ -7,6 +7,8 @@ public class HexGenerator : MonoBehaviour
     [SerializeField] private HexCreator hexCreator; // Assign the ScriptableObject in the Inspector
     [SerializeField] private Transform[] spawnPositions; // Set possible positions in Inspector
 
+    [SerializeField] private GameData gameData;
+
     private void Start()
     {
         if (hexCreator == null)
@@ -56,5 +58,14 @@ public class HexGenerator : MonoBehaviour
                 hexParentScript.SetInit();
             }
         }
+
+        gameData.LevelHexParentNumber=hexCreator.hexParents.Count;
+        
+    }
+
+
+    private void OnRestart()
+    {
+        GenerateHexParents();
     }
 }
