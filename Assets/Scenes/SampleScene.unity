@@ -156,6 +156,7 @@ Transform:
   - {fileID: 826781575}
   - {fileID: 767556572}
   - {fileID: 1468716130}
+  - {fileID: 795591062}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &107147527
@@ -566,7 +567,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 795591061}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 1.5, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -578,7 +579,7 @@ Transform:
   - {fileID: 8405195929996461717}
   - {fileID: 8942693912780656543}
   - {fileID: 5638861714314917125}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 45392959}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &826781574
 GameObject:
@@ -633,6 +634,7 @@ MonoBehaviour:
   - {fileID: 8405195929996461717}
   - {fileID: 8942693912780656543}
   - {fileID: 5638861714314917125}
+  totalHexSpawnTime: 0.5
   gameData: {fileID: 11400000, guid: 1a01e37d36bf09f46876514612c634b4, type: 2}
 --- !u!1 &963194225
 GameObject:
@@ -982,7 +984,8 @@ MonoBehaviour:
   - {fileID: 3085116481314856590}
   - {fileID: 4570390004775908400}
   - {fileID: 3354852286150120009}
-  rotationSpeed: 50
+  rotationSpeed: 90
+  RangeOfCriticalThreshold: 5
 --- !u!1 &1652629144
 GameObject:
   m_ObjectHideFlags: 0
@@ -3064,4 +3067,3 @@ SceneRoots:
   - {fileID: 246951743}
   - {fileID: 1131075302}
   - {fileID: 45392959}
-  - {fileID: 795591062}

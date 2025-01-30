@@ -7,6 +7,7 @@ public class HexGenerator : MonoBehaviour
     [SerializeField] private HexCreator hexCreator; // Assign the ScriptableObject in the Inspector
     [SerializeField] private Transform[] spawnPositions; // Set possible positions in Inspector
 
+    [SerializeField] private float totalHexSpawnTime = 3f; // Total time for all HexParents to spawn
     [SerializeField] private GameData gameData;
 
     private void Start()
@@ -17,22 +18,23 @@ public class HexGenerator : MonoBehaviour
             return;
         }
 
-        GenerateHexParents();
+        StartCoroutine(GenerateHexParents());
     }
 
-    void GenerateHexParents()
+    IEnumerator GenerateHexParents()
     {
         if (spawnPositions.Length == 0)
         {
             Debug.LogError("SpawnPositions not assigned!");
-            return;
+            yield break;
         }
 
         List<Transform> availablePositions = new List<Transform>(spawnPositions);
+        float delayBetweenParents = totalHexSpawnTime / hexCreator.hexParents.Count;
 
         for (int i = 0; i < hexCreator.hexParents.Count; i++)
         {
-            if (availablePositions.Count == 0) break; // Stop if no more positions available
+            if (availablePositions.Count == 0) break;
 
             HexCreator.HexParentData data = hexCreator.hexParents[i];
 
@@ -44,8 +46,9 @@ public class HexGenerator : MonoBehaviour
 
             int randomIndex = Random.Range(0, availablePositions.Count);
             Transform spawnPoint = availablePositions[randomIndex];
-            availablePositions.RemoveAt(randomIndex); // Remove position to avoid duplicates
+            availablePositions.RemoveAt(randomIndex);
 
+            // Spawn HexParent
             GameObject hexParentObj = Instantiate(data.hexParentPrefab, spawnPoint.position, Quaternion.identity);
             HexParent hexParentScript = hexParentObj.GetComponent<HexParent>();
 
@@ -55,12 +58,15 @@ public class HexGenerator : MonoBehaviour
                 hexParentScript.yInterval = data.yInterval;
                 hexParentScript.hexChildPrefab = data.hexChildPrefab;
 
+                // Initialize and Wait for HexParent to complete spawning its HexChildren
                 hexParentScript.SetInit();
+                yield return StartCoroutine(hexParentScript.SpawnHexChildrenWithEffect());
             }
+
+            yield return new WaitForSeconds(delayBetweenParents);
         }
 
-        gameData.LevelHexParentNumber=hexCreator.hexParents.Count;
-        
+        gameData.LevelHexParentNumber = hexCreator.hexParents.Count;
     }
 
 

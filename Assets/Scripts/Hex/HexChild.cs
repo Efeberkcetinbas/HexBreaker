@@ -7,17 +7,34 @@ public class HexChild : MonoBehaviour
 {
     public TextMeshProUGUI textUI;
 
-    public void SetHexChild(Color parentColor, int towerValue)
-    {
-        Renderer renderer = GetComponent<Renderer>();
-        if (renderer != null)
-        {
-            renderer.material.color = parentColor;
-        }
+    private Renderer rendererobj;
 
+    private void Awake()
+    {
+        rendererobj = GetComponent<Renderer>();
+    }
+
+    public void SetHexChild(int towerValue)
+    {
         if (textUI != null)
         {
             textUI.text = towerValue.ToString();
+        }
+    }
+
+    public void SetHexColor(Color parentColor)
+    {
+        if (rendererobj != null)
+        {
+            rendererobj.material.color = parentColor;
+        }
+    }
+
+    internal void SetHexDecreaseColor(Color parentColor)
+    {
+        if (rendererobj != null)
+        {
+            rendererobj.material.color = parentColor;
         }
     }
 }

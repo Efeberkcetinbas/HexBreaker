@@ -25,3 +25,11 @@ MonoBehaviour:
     towerValue: 12
     yInterval: 0.2
     hexChildPrefab: {fileID: 8377991755981697101, guid: d0972d6fc5e6889419c36f004f5a1172, type: 3}
+  - hexParentPrefab: {fileID: 2422768982452199324, guid: e95d2a8f4f5d99f4bb0542e6af45ad49, type: 3}
+    towerValue: 96
+    yInterval: 0.2
+    hexChildPrefab: {fileID: 8377991755981697101, guid: d0972d6fc5e6889419c36f004f5a1172, type: 3}
+  - hexParentPrefab: {fileID: 2422768982452199324, guid: e95d2a8f4f5d99f4bb0542e6af45ad49, type: 3}
+    towerValue: 74
+    yInterval: 0.2
+    hexChildPrefab: {fileID: 8377991755981697101, guid: d0972d6fc5e6889419c36f004f5a1172, type: 3}

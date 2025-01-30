@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class HexParent : MonoBehaviour
 {
@@ -12,11 +13,17 @@ public class HexParent : MonoBehaviour
     [SerializeField] private GameData gameData;
 
     private Color currentColor;
+    private WaitForSeconds colorDamageWaitforseconds;
+
+    private void Start()
+    {
+        colorDamageWaitforseconds=new WaitForSeconds(0.05f);
+    }
+
 
     internal void SetInit()
     {
         UpdateColor();
-        SpawnHexChildren();
     }
 
     void UpdateColor()
@@ -38,6 +45,25 @@ public class HexParent : MonoBehaviour
         //Debug.Log($"Tower Value: {towerValue}, Color Index: {lowerIndex}-{upperIndex}, Lerp: {lerpFactor}, Color: {currentColor}");
     }
 
+    private IEnumerator SetDecreaseColor()
+    {
+        HexChild[] children = GetComponentsInChildren<HexChild>(); // Cache results
+
+        foreach (HexChild child in children)
+        {
+            child.SetHexDecreaseColor(Color.white);
+        }
+
+        yield return colorDamageWaitforseconds;
+
+        UpdateColor();
+        
+        foreach (HexChild child in children)
+        {
+            child.SetHexColor(currentColor);
+        }
+    }
+
     public void DecreaseTowerValue()
     {
         towerValue = Mathf.Max(0, towerValue - gameData.BulletDamageAmount); // Reduce by 1 per bullet
@@ -51,7 +77,8 @@ public class HexParent : MonoBehaviour
         }
         else
         {
-            UpdateColor();
+            //UpdateColor();
+            StartCoroutine(SetDecreaseColor());
             UpdateHexChildText();
         }
     }
@@ -79,24 +106,36 @@ public class HexParent : MonoBehaviour
     {
         foreach (HexChild child in GetComponentsInChildren<HexChild>())
         {
-            child.SetHexChild(currentColor, towerValue);
+            child.SetHexChild(towerValue);
+            //child.SetHexColor(currentColor);
         }
     }
 
-    void SpawnHexChildren()
+    public IEnumerator SpawnHexChildrenWithEffect()
     {
-        int childCount = towerValue / 5;
+        int childCount = Mathf.Max(1, towerValue / 5);
 
         for (int i = 0; i < childCount; i++)
         {
             GameObject child = Instantiate(hexChildPrefab, transform);
             child.transform.localPosition = new Vector3(0, i * yInterval, 0);
+            child.transform.localScale = Vector3.zero; // Start with scale 0
 
             HexChild hexChildScript = child.GetComponent<HexChild>();
             if (hexChildScript != null)
             {
-                hexChildScript.SetHexChild(currentColor, towerValue);
+                hexChildScript.SetHexColor(currentColor);
+                hexChildScript.SetHexChild(towerValue);
             }
+
+            Debug.Log("HexChild Spawn");
+
+            // DOTween Animation: Scale up and rotate
+            child.transform.DOScale(Vector3.one, 0.5f).SetEase(Ease.OutBack);
+            child.transform.DORotate(new Vector3(0, 360, 0), 0.5f, RotateMode.FastBeyond360)
+                .SetEase(Ease.OutQuad);
+
+            yield return new WaitForSeconds(0.1f); // Small delay between HexChild spawns
         }
     }
 
