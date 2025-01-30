@@ -19,12 +19,12 @@ MonoBehaviour:
   ChanceOfCriticalHit: 50
   CriticalHitDamage: 5
   timerTypes: 1
-  LevelHexParentNumber: 5
+  LevelHexParentNumber: 0
   WeaponIndex: 0
   WeaponBoosterAmount: 0
   BulletDamageAmount: 1
-  RoundedTime: 0
+  RoundedTime: 34
   maxTimerRange: 100
-  isGameEnd: 1
-  canTouch: 0
-  isStartTimer: 1
+  isGameEnd: 0
+  canTouch: 1
+  isStartTimer: 0

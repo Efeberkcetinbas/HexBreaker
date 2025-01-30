@@ -14,6 +14,8 @@ public class HexParent : MonoBehaviour
 
     private Color currentColor;
     private WaitForSeconds colorDamageWaitforseconds;
+    private static readonly Color DamageColor = new Color(1f, 0.25f, 0.25f); // RGB(255, 64, 64)
+
 
     private void Start()
     {
@@ -47,17 +49,15 @@ public class HexParent : MonoBehaviour
 
     private IEnumerator SetDecreaseColor()
     {
-        HexChild[] children = GetComponentsInChildren<HexChild>(); // Cache results
+        HexChild[] children = GetComponentsInChildren<HexChild>(); 
+        if (children.Length == 0) yield break; // No children exist
 
-        foreach (HexChild child in children)
-        {
-            child.SetHexDecreaseColor(Color.white);
-        }
+        HexChild topChild = children[children.Length - 1]; // Get topmost child
 
+        topChild.SetHexDecreaseColor(Color.white); // Set top child to red-pink
         yield return colorDamageWaitforseconds;
 
         UpdateColor();
-        
         foreach (HexChild child in children)
         {
             child.SetHexColor(currentColor);
@@ -78,6 +78,7 @@ public class HexParent : MonoBehaviour
         else
         {
             //UpdateColor();
+            transform.DOPunchScale(Vector3.one * 0.2f, 0.1f, 10, 1); 
             StartCoroutine(SetDecreaseColor());
             UpdateHexChildText();
         }
@@ -138,7 +139,5 @@ public class HexParent : MonoBehaviour
             yield return new WaitForSeconds(0.1f); // Small delay between HexChild spawns
         }
     }
-
-    
     
 }

@@ -8,6 +8,8 @@ public class HexChild : MonoBehaviour
     public TextMeshProUGUI textUI;
 
     private Renderer rendererobj;
+    private static readonly int ColorProperty = Shader.PropertyToID("_Color"); // Cache shader property
+
 
     private void Awake()
     {
@@ -34,7 +36,7 @@ public class HexChild : MonoBehaviour
     {
         if (rendererobj != null)
         {
-            rendererobj.material.color = parentColor;
+            rendererobj.sharedMaterial.SetColor(ColorProperty, parentColor);
         }
     }
 }
