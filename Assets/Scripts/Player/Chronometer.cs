@@ -69,6 +69,7 @@ public class Chronometer : MonoBehaviour
         EventManager.AddHandler(GameEvent.OnStartTimer,OnStartTimer);
         EventManager.AddHandler(GameEvent.OnStopTimer,OnStopTimer);
         EventManager.AddHandler(GameEvent.OnRestartLevel,OnRestartLevel);
+        EventManager.AddHandler(GameEvent.OnUpdateRounded,OnUpdateRounded);
 
     }
 
@@ -78,6 +79,7 @@ public class Chronometer : MonoBehaviour
         EventManager.RemoveHandler(GameEvent.OnStartTimer,OnStartTimer);
         EventManager.RemoveHandler(GameEvent.OnStopTimer,OnStopTimer);
         EventManager.RemoveHandler(GameEvent.OnRestartLevel,OnRestartLevel);
+        EventManager.RemoveHandler(GameEvent.OnUpdateRounded,OnUpdateRounded);
 
     }
 
@@ -125,6 +127,13 @@ public class Chronometer : MonoBehaviour
     {
         isStop=true;
         ScaleUP();
+    }
+
+    private void OnUpdateRounded()
+    {
+        ScaleUP();
+        timerText.SetText(gameData.RoundedTime.ToString());
+
     }
 
     private void ScaleUP()

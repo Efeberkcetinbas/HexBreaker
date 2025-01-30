@@ -6,6 +6,7 @@ public enum GameEvent
 {
     //Player
     OnPlayerStartMove,
+    OnPlayerStopMove,
 
     //Timer
     OnStartTimer,
@@ -16,6 +17,9 @@ public enum GameEvent
 
     //Combo
     OnCheckCombo,
+
+    //Critical Hit
+    OnUpdateRounded,
 
     //Weapon
     OnSelectWeaponType,

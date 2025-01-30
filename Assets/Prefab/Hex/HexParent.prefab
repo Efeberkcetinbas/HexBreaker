@@ -55,3 +55,4 @@ MonoBehaviour:
   - {r: 1, g: 0.16271621, b: 0, a: 1}
   - {r: 0.80190086, g: 0, b: 1, a: 1}
   - {r: 0.07728577, g: 0, b: 1, a: 1}
+  gameData: {fileID: 11400000, guid: 1a01e37d36bf09f46876514612c634b4, type: 2}

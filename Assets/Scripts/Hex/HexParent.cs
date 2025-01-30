@@ -8,6 +8,9 @@ public class HexParent : MonoBehaviour
     public float yInterval = 0.5f;
     public GameObject hexChildPrefab;
     public Color[] valueColors; // Assign colors in Inspector: blue-green-yellow-orange-red-purple-dark blue
+
+    [SerializeField] private GameData gameData;
+
     private Color currentColor;
 
     internal void SetInit()
@@ -37,7 +40,7 @@ public class HexParent : MonoBehaviour
 
     public void DecreaseTowerValue()
     {
-        towerValue = Mathf.Max(0, towerValue - 1); // Reduce by 1 per bullet
+        towerValue = Mathf.Max(0, towerValue - gameData.BulletDamageAmount); // Reduce by 1 per bullet
 
         UpdateHexChildren();
 
@@ -96,4 +99,7 @@ public class HexParent : MonoBehaviour
             }
         }
     }
+
+    
+    
 }

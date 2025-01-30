@@ -12,10 +12,32 @@ public class Player : MonoBehaviour
         gameData.isStartTimer=true;
     }
 
+    private void OnEnable()
+    {
+        EventManager.AddHandler(GameEvent.OnPlayerStartMove, OnPlayerStartMove);
+        EventManager.AddHandler(GameEvent.OnPlayerStopMove, OnPlayerStopMove);
+    }
+
+    private void OnDisable()
+    {
+        EventManager.RemoveHandler(GameEvent.OnPlayerStartMove, OnPlayerStartMove);
+        EventManager.RemoveHandler(GameEvent.OnPlayerStopMove, OnPlayerStopMove);
+    }
+
     void Update()
     {
-        if(!gameData.isGameEnd)
+        if(!gameData.isGameEnd && gameData.canTouch)
             CheckStartStop();
+    }
+
+    private void OnPlayerStartMove()
+    {
+        gameData.canTouch=true;
+    }
+
+    private void OnPlayerStopMove()
+    {
+        gameData.canTouch=false;
     }
 
     

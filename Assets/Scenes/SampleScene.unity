@@ -982,6 +982,7 @@ MonoBehaviour:
   - {fileID: 3085116481314856590}
   - {fileID: 4570390004775908400}
   - {fileID: 3354852286150120009}
+  rotationSpeed: 50
 --- !u!1 &1652629144
 GameObject:
   m_ObjectHideFlags: 0

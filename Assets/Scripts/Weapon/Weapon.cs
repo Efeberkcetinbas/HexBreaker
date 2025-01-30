@@ -2,15 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using DG.Tweening;
 
 public class Weapon : MonoBehaviour
 {
-    
+    [Header("Data")]
     [SerializeField] private GameData gameData;
-    [SerializeField] private List<WeaponType> weaponTypes= new List<WeaponType>();
 
+    [Header("Weapon Prop")]
+    [SerializeField] private List<WeaponType> weaponTypes= new List<WeaponType>();
+    [SerializeField] private float rotationSpeed = 5f; // Speed for rotating to target
     private Transform firePoint;
     private float fireRate = 0.2f; // Interval between shots
+
+    [Header("Critical Hit")]
+    [SerializeField] private int RangeOfCriticalThreshold=5;
 
 
 
@@ -35,6 +41,8 @@ public class Weapon : MonoBehaviour
         StartCoroutine(FireBullets());
     }
 
+    #region WeaponLogic
+
     private void OnSelectWeaponType()
     {
         for (int i = 0; i < weaponTypes.Count; i++)
@@ -51,7 +59,11 @@ public class Weapon : MonoBehaviour
 
     IEnumerator FireBullets()
     {
-        int bulletsToFire = gameData.RoundedTime+gameData.WeaponBoosterAmount;
+        CheckHighDamage();
+
+        int bulletsToFire = gameData.RoundedTime + gameData.WeaponBoosterAmount;
+
+        EventManager.Broadcast(GameEvent.OnPlayerStopMove);
 
         for (int i = 0; i < bulletsToFire; i++)
         {
@@ -59,6 +71,13 @@ public class Weapon : MonoBehaviour
 
             if (target != null)
             {
+                // Rotate weapon to face the target smoothly
+                RotateWeaponTowards(target);
+
+                // Create shooting animation with DOTween (e.g., recoil effect)
+                AnimateWeaponShooting();
+
+                // Instantiate and fire bullet
                 GameObject bullet = BulletPool.Instance.GetBullet();
                 bullet.transform.position = firePoint.position;
                 bullet.transform.rotation = firePoint.rotation;
@@ -72,6 +91,9 @@ public class Weapon : MonoBehaviour
 
             yield return new WaitForSeconds(fireRate);
         }
+        
+        Debug.Log("ALL BULLETS FIRED");
+        EventManager.Broadcast(GameEvent.OnPlayerStartMove);
     }
 
     private Transform FindNearestHexParent()
@@ -87,4 +109,67 @@ public class Weapon : MonoBehaviour
             .OrderBy(h => Vector3.Distance(firePoint.position, h.transform.position))
             .FirstOrDefault()?.transform;
     }
+
+    private void RotateWeaponTowards(Transform target)
+    {
+        // Smoothly rotate the weapon towards the target HexParent
+        Vector3 direction = (target.position - firePoint.position).normalized;
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+    }
+
+    private void AnimateWeaponShooting()
+    {
+        // Example of a recoil effect (slightly move the weapon back when shooting)
+        transform.DOPunchPosition(Vector3.back * 0.2f, 0.2f, 10, 1)
+            .OnKill(() => transform.DOPunchRotation(new Vector3(0, 10, 0), 0.1f)); // Add slight rotation shake
+    }
+
+    #endregion
+
+
+    #region CriticalHit
+    // Checks Probability of Critical Hit
+    private bool ProbabilityCheck()
+    {
+        float rand=Random.Range(0,101);
+        Debug.Log("randomChance " + rand);
+        if(rand<=gameData.ChanceOfCriticalHit)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private void CheckHighDamage()
+    {
+        if(gameData.maxTimerRange-gameData.RoundedTime<=RangeOfCriticalThreshold)
+        {
+            if(ProbabilityCheck())
+            {
+                gameData.RoundedTime+=gameData.CriticalHitDamage;
+                EventManager.Broadcast(GameEvent.OnUpdateRounded);
+                //EventManager.Broadcast(GameEvent.OnCriticalHit);
+                Debug.Log("CRITICAL HIT");
+            }
+            else
+                return;
+        }
+    }
+
+    #endregion
+
+
+    #region GameEvents
+    private void OnRestart()
+    {
+        transform.rotation = Quaternion.identity;
+    }
+
+    private void OnNextLevel()
+    {
+        transform.rotation = Quaternion.identity;
+    }
+
+    #endregion
 }
