@@ -44,31 +44,22 @@ public class Player : MonoBehaviour
 
     private void CheckStartStop()
     {
-        if(Input.touchCount>0)
+        if (Input.touchCount > 0)
         {
-            Touch touch=Input.GetTouch(0);
-            if(touch.phase==TouchPhase.Began && touch.position.y<(Screen.height*(1-screePercentageToExclude/100)))
+            Touch touch = Input.GetTouch(0);
+            bool isValidTouch = touch.position.y < (Screen.height * (1 - screePercentageToExclude / 100));
+
+            if (touch.phase == TouchPhase.Began && isValidTouch)
             {
-                gameData.isStartTimer=!gameData.isStartTimer;
-                SendStartStop();
+                gameData.isStartTimer = true;
+                EventManager.Broadcast(GameEvent.OnStartTimer);
             }
-            
+            else if (touch.phase == TouchPhase.Ended && isValidTouch)
+            {
+                gameData.isStartTimer = false;
+                EventManager.Broadcast(GameEvent.OnStopTimer);
+            }
         }
-    }
-
-    private void SendStartStop()
-    {
-        if(gameData.isStartTimer)
-        {
-            EventManager.Broadcast(GameEvent.OnStartTimer);
-        }
-            
-        else
-        {
-            EventManager.Broadcast(GameEvent.OnStopTimer);
-
-        }
-            
     }
 
 }

@@ -6,27 +6,20 @@ using System;
 using DG.Tweening;
 using UnityEngine.UI;
 
-//Enum ile timer type yap ilk leveller basit yavasca artarken ilerki levellerde hizla arttir.
-public enum TimerTypes
-{
-    basicTimer,
-    milliTimer,
-}
+
 
 public class Chronometer : MonoBehaviour
 {
     [SerializeField] private GameData gameData;
+    private bool isHolding;
+    private float holdStartTime;
+    private float elapsedTime;
 
-    private bool isStop;
-
-    public Image progressBarFill; 
-
-    //Timer
-    [Header("TIME")]
-    private float cTime;
-    private int multiply;
+    public Image progressBarFill;
     [SerializeField] private TextMeshProUGUI timerText;
-    private TimerTypes timerTypes;
+    
+
+
     private void Start()
     {
         OnNextLevel();
@@ -34,33 +27,32 @@ public class Chronometer : MonoBehaviour
 
     private void Update()
     {
-        if(!gameData.isGameEnd)
-            SetTimer();
+        if (!gameData.isGameEnd && isHolding)
+        {
+            UpdateTimer();
+        }
     }
 
-    private void SetTimer()
+    private void UpdateTimer()
     {
-        if(!isStop)
+        elapsedTime = Time.time - holdStartTime;
+
+        if (elapsedTime >= gameData.maxTimerRange)
         {
-            if(cTime<=gameData.maxTimerRange)
-            {
-                cTime+=Time.deltaTime*multiply;
-                gameData.RoundedTime=Mathf.RoundToInt(cTime);
-                timerText.SetText(gameData.RoundedTime.ToString());
-            }
-            else
-            {
-                cTime=0;
-            }
-
-            float fillAmount = Mathf.Clamp01(cTime / gameData.maxTimerRange);
-            //progressBarFill.fillAmount = fillAmount;
-
-            // Update the color based on the progress
-            //progressBarFill.color = GetColorForProgress(fillAmount);
-            
+            elapsedTime = gameData.maxTimerRange; // Cap it
+            Debug.LogWarning("Elapsed time exceeded maxTimerRange! Clamping to max value.");
         }
-        
+
+        float percentage = elapsedTime / gameData.maxTimerRange;
+        gameData.RoundedTime = Mathf.Clamp(Mathf.RoundToInt(percentage * 100), 0, 100);
+
+        // Format seconds and milliseconds (e.g., "15,67")
+        string formattedTime = elapsedTime.ToString("F2").Replace('.', ',');
+        timerText.SetText(formattedTime);
+
+        // Update progress bar
+        progressBarFill.fillAmount = percentage;
+        progressBarFill.color = GetColorForProgress(percentage);
     }
 
     private void OnEnable()
@@ -85,8 +77,6 @@ public class Chronometer : MonoBehaviour
 
     private void OnNextLevel()
     {
-        CheckTimerType();
-        cTime=0;
         gameData.RoundedTime=0;
         timerText.SetText(gameData.RoundedTime.ToString());
         //progressBarFill.fillAmount=0;
@@ -101,32 +91,26 @@ public class Chronometer : MonoBehaviour
         timerText.SetText(gameData.RoundedTime.ToString());
     }
 
-    private void CheckTimerType()
-    {
-        switch(gameData.timerTypes)
-        {
-            case TimerTypes.basicTimer:
-                multiply=1;
-                break;
-            case TimerTypes.milliTimer:
-                multiply=50;
-                break;
-        }
-        
-    }
-
+   
    
     private void OnStartTimer()
     {   
-        isStop=false;
+        isHolding = true;
+        holdStartTime = Time.time;
+        elapsedTime = 0;
+        gameData.RoundedTime = 0;
+        timerText.SetText("0");
+        progressBarFill.fillAmount = 0;
     }
 
     
 
     private void OnStopTimer()
     {
-        isStop=true;
+        isHolding = false;
         ScaleUP();
+        gameData.Credit--;
+        //EventManager.Broadcast(GameEvent.OnSetFeedback);
     }
 
     private void OnUpdateRounded()
@@ -143,27 +127,14 @@ public class Chronometer : MonoBehaviour
 
     private Color GetColorForProgress(float progress)
     {
-        // Define the colors
         Color green = Color.green;
         Color yellow = Color.yellow;
-        Color orange = new Color(1f, 0.5f, 0f); // Orange
+        Color orange = new Color(1f, 0.5f, 0f);
         Color red = Color.red;
 
-        if (progress < 0.33f)
-        {
-            // From Green to Yellow (0% - 33%)
-            return Color.Lerp(green, yellow, progress / 0.33f);
-        }
-        else if (progress < 0.66f)
-        {
-            // From Yellow to Orange (33% - 66%)
-            return Color.Lerp(yellow, orange, (progress - 0.33f) / 0.33f);
-        }
-        else
-        {
-            // From Orange to Red (66% - 100%)
-            return Color.Lerp(orange, red, (progress - 0.66f) / 0.34f);
-        }
+        if (progress < 0.33f) return Color.Lerp(green, yellow, progress / 0.33f);
+        else if (progress < 0.66f) return Color.Lerp(yellow, orange, (progress - 0.33f) / 0.33f);
+        else return Color.Lerp(orange, red, (progress - 0.66f) / 0.34f);
     }
 
 }

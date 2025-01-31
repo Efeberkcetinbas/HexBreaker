@@ -16,10 +16,10 @@ public class GameData : ScriptableObject
     public int ChanceOfCriticalHit;
     public int CriticalHitDamage;
 
-    public TimerTypes timerTypes;
 
     //Level
     public int LevelHexParentNumber;
+    public int Credit;
 
     //Weapon
     public int WeaponIndex;

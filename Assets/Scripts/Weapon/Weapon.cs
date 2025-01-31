@@ -94,7 +94,10 @@ public class Weapon : MonoBehaviour
         
         Debug.Log("ALL BULLETS FIRED");
         EventManager.Broadcast(GameEvent.OnPlayerStartMove);
+        EventManager.Broadcast(GameEvent.OnCheckCredit);
     }
+
+    
 
     private Transform FindNearestHexParent()
     {

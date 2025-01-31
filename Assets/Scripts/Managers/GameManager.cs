@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
         EventManager.AddHandler(GameEvent.OnNextLevel,OnNextLevel);
         EventManager.AddHandler(GameEvent.OnRestartLevel,OnRestartLevel);
         EventManager.AddHandler(GameEvent.OnHexDestroyed,OnHexDestroyed);
+        EventManager.AddHandler(GameEvent.OnCheckCredit,OnCheckCredit);
 
     }
 
@@ -34,6 +35,7 @@ public class GameManager : MonoBehaviour
         EventManager.RemoveHandler(GameEvent.OnNextLevel,OnNextLevel);
         EventManager.RemoveHandler(GameEvent.OnRestartLevel,OnRestartLevel);
         EventManager.RemoveHandler(GameEvent.OnHexDestroyed,OnHexDestroyed);
+        EventManager.RemoveHandler(GameEvent.OnCheckCredit,OnCheckCredit);
 
     }
 
@@ -70,8 +72,28 @@ public class GameManager : MonoBehaviour
         EventManager.Broadcast(GameEvent.OnGameOver);
     }
 
-   
-    private void OnGameOver()
+    
+    private void OnCheckCredit()
+    {
+        int totalTowerValueSum = 0;
+        HexParent[] hexParents = FindObjectsOfType<HexParent>(); // Finds all HexParent instances
+
+        foreach (HexParent hexParent in hexParents)
+        {
+            totalTowerValueSum += hexParent.towerValue;
+        }
+
+        Debug.Log("TOTAL TOWER VALUE" + totalTowerValueSum);
+
+        // Checking if the credit-based value is insufficient
+        if ((gameData.CriticalHitDamage + 100) * gameData.Credit < totalTowerValueSum)
+        {
+            Debug.LogWarning("FAIL EVENT: Not enough credit!");
+        }
+        
+    }
+
+    private void OnFailUI()
     {
         gameData.isGameEnd=true;
         StartCoroutine(OpenFail());

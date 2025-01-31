@@ -7,6 +7,7 @@ public enum GameEvent
     //Player
     OnPlayerStartMove,
     OnPlayerStopMove,
+    OnCheckCredit,
 
     //Timer
     OnStartTimer,
@@ -21,8 +22,12 @@ public enum GameEvent
     //Critical Hit
     OnUpdateRounded,
 
+    //Feedback
+    OnSetFeedback,
+
     //Weapon
     OnSelectWeaponType,
+    
 
     
     //Game Management
